@@ -15,6 +15,8 @@ except ModuleNotFoundError:
     def validate_task_description(description):
         if len(description) == 0:
             raise ValueError("Task description cannot be empty")
+        if len(description) > 500:
+            raise ValueError("Task description cannot exceed 500 characters")
         return True
 
     def validate_due_date(due_date):
