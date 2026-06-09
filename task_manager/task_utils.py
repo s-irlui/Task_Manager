@@ -5,21 +5,13 @@ from task_manager.validation import (
 )
 
 
-def add_task(tasks, title, description, due_date):
-    valid_title, title_error = validate_task_title(title)
-    if not valid_title:
-        print(title_error)
-        return
+tasks = []
 
-    valid_description, description_error = validate_task_description(description)
-    if not valid_description:
-        print(description_error)
-        return
 
-    valid_due_date, due_date_error = validate_due_date(due_date)
-    if not valid_due_date:
-        print(due_date_error)
-        return
+def add_task(title, description, due_date):
+    validate_task_title(title)
+    validate_task_description(description)
+    validate_due_date(due_date)
 
     task = {
         "title": title,
@@ -29,50 +21,44 @@ def add_task(tasks, title, description, due_date):
     }
 
     tasks.append(task)
-    print("Task added successfully.")
+    print("Task added successfully!")
 
 
-def mark_task_as_complete(tasks, task_number):
+def mark_task_as_complete(index, tasks=tasks):
     if len(tasks) == 0:
         print("No tasks available.")
         return
 
-    if task_number < 1 or task_number > len(tasks):
-        print("Invalid task number.")
+    if index < 0 or index >= len(tasks):
+        print("Invalid task index.")
         return
 
-    tasks[task_number - 1]["completed"] = True
-    print("Task marked as complete.")
+    tasks[index]["completed"] = True
+    print("Task marked as complete!")
 
 
-def view_pending_tasks(tasks):
-    pending_tasks = []
+def view_pending_tasks(tasks=tasks):
+    if len(tasks) == 0:
+        print("No tasks available.")
+        return
 
     for task in tasks:
         if task["completed"] == False:
-            pending_tasks.append(task)
-
-    if len(pending_tasks) == 0:
-        print("No pending tasks.")
-        return
-
-    print("\nPending Tasks:")
-    for index, task in enumerate(pending_tasks, start=1):
-        print(f"{index}. {task['title']}")
-        print(f"   Description: {task['description']}")
-        print(f"   Due Date: {task['due_date']}")
+            print(task)
 
 
-def calculate_progress(tasks):
+def calculate_progress(tasks=tasks):
     if len(tasks) == 0:
-        print("No tasks available.")
-        return
+        progress = 0.0
+        print(progress)
+        return progress
 
-    completed_count = 0
+    completed_tasks = 0
 
     for task in tasks:
         if task["completed"] == True:
-            completed_count += 1
+            completed_tasks += 1
 
-    progress = (completed_count / len(tasks)) * 100
-    print(f"Progress: {progress:.2f}% completed")
+    progress = (completed_tasks / len(tasks)) * 100
+    print(progress)
+    return progress
